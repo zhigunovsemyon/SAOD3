@@ -1,21 +1,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 /*В файле записан текст стихотворения. Форматировать текст так,
 чтобы каждый куплет из 4 строк следовал с одной и той же позиции,
 начинался с прописной буквы и был сдвинут относительно предыдущего
 куплета на 5 позиций вправо или влево поочередно. */
 
 #define COUPLET 4
-
-// Вычисление длинны файла fptr
-long FileLen(FILE *const fptr) {
-    fseek(fptr, SEEK_SET, SEEK_END);
-    long const len = ftell(fptr);
-    rewind(fptr);
-    return len;
-}
 
 // Вывод справки об использовании
 void usage(char const *const filename) {

@@ -6,6 +6,14 @@
 начинался с прописной буквы и был сдвинут относительно предыдущего
 куплета на 5 позиций вправо или влево поочередно. */
 
+//Вычисление длинны файла fptr
+long FileLen(FILE *const fptr) {
+    fseek(fptr, SEEK_SET, SEEK_END);
+    long const len = ftell(fptr);
+    rewind(fptr);
+    return len;
+}
+
 //Вывод справки об использовании
 void usage(char const * const filename) {
 	printf("%s ПУТЬ_К_ФАЙЛУ\n", filename);
@@ -18,6 +26,15 @@ int main (int const argc, char const * const * const args) {
 		return EXIT_SUCCESS;
 	}
 
+	//Открываемый файл с текстом
+	FILE *src;
+	//Открытие файла, вывод ошибки при неудаче
+	if (NULL == (src = fopen(args[1], "rt"))){
+		perror(args[1]);
+		return EXIT_FAILURE;
+	}
+
+	fclose(src); //Закрытие файла
     puts("Hello world!");
     return EXIT_SUCCESS;
 }

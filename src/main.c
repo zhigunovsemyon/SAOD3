@@ -62,5 +62,4 @@ int main(int const argc, char const *const *const args) {
     FormatAndPrint(src);
     fclose(src); // Закрытие файла
     return EXIT_SUCCESS;
-
 }

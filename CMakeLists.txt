@@ -10,14 +10,14 @@ if (POLICY CMP0141)
 endif()
 
 project ("SAOD3" LANGUAGES C)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 23)
 file(GLOB C_FILES "src/*.c")
 
 if (WIN32)
 	add_definitions("/W4 /WX") 
 	add_compile_options(-D _CRT_SECURE_NO_WARNINGS)
 else()
-	add_definitions("-Wall -Wextra -Werror -Wconversion -Wsign-conversion")
+    add_definitions("-Wpedantic -Wall -Wextra -Werror -Wconversion -Wsign-conversion")
 endif(WIN32)
 
 add_executable (${PROJECT_NAME} ${C_FILES}) 

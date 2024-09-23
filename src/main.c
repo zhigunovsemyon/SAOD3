@@ -7,9 +7,8 @@
 начинался с прописной буквы и был сдвинут относительно предыдущего
 куплета на 5 позиций вправо или влево поочередно. */
 
-//Функция, добавляющая вставку сдвига перед текстом
-inline char const * Identation (bool const Ident){
-	return (Ident) ? "     " : "";
+inline void PutIdent(void) {
+	printf("     ");
 }
 
 //Вычисление длинны файла fptr
@@ -40,7 +39,23 @@ int main (int const argc, char const * const * const args) {
 		return EXIT_FAILURE;
 	}
 
-	fclose(src); //Закрытие файла
-    puts("Hello world!");
-    return EXIT_SUCCESS;
+	// bool Ident = true;
+	[[maybe_unused]]size_t line = 0;
+	// bool FirstChar = true;
+	while (true){
+		int curChar = fgetc(src);
+		switch (curChar) {
+			case '\r':
+			break;
+			case EOF:
+			fclose(src); //Закрытие файла
+		    return EXIT_SUCCESS;
+			break;
+			case '\n':
+			line++;
+			default:
+			putchar(curChar);
+			break;
+		}
+	}
 }

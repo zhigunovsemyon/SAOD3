@@ -20,26 +20,29 @@ long FileLen(FILE *const fptr) {
 }
 
 // Вывод справки об использовании
-inline void usage(char const *const filename) {
+void usage(char const *const filename) {
     printf("%s ПУТЬ_К_ФАЙЛУ\n", filename);
 }
 
+//Функция, в которой будет исполняться алгоритм используя файл src
 void FormatAndPrint(FILE *const src) {
     // bool Ident = true;
     [[maybe_unused]] size_t line = 0;
     // bool FirstChar = true;
     while (true) {
-        int curChar = fgetc(src);
+        //Прочитанный символ
+        int const curChar = fgetc(src);
+        //Возможные действия с прочитанным символом
         switch (curChar) {
-        case '\r':
+        case '\r'://Служебный символ возврата каретки, пропуск
             break;
-        case EOF:
+        case EOF://Символ, сигнализирующий окончание файла, завершение работы
             return;
-        case '\n':
-            line++;
-        default:
-            putchar(curChar);
-            break;
+        case '\n'://Символ переноса строки
+            line++;//Увеличение счётчика строк, вывод на экран (далее)
+        default://Любой иной символ
+            putchar(curChar);//Вывод
+            break;//Переход на следующий виток цикла
         }
     }
 }

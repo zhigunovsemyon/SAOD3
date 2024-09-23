@@ -24,6 +24,26 @@ inline void usage(char const *const filename) {
     printf("%s ПУТЬ_К_ФАЙЛУ\n", filename);
 }
 
+void FormatAndPrint(FILE *const src) {
+    // bool Ident = true;
+    [[maybe_unused]] size_t line = 0;
+    // bool FirstChar = true;
+    while (true) {
+        int curChar = fgetc(src);
+        switch (curChar) {
+        case '\r':
+            break;
+        case EOF:
+            return;
+        case '\n':
+            line++;
+        default:
+            putchar(curChar);
+            break;
+        }
+    }
+}
+
 int main(int const argc, char const *const *const args) {
     // Вывод справки об использовании при неправильном вводе
     if (argc != 2) {
@@ -39,23 +59,8 @@ int main(int const argc, char const *const *const args) {
         return EXIT_FAILURE;
     }
 
-    // bool Ident = true;
-    [[maybe_unused]] size_t line = 0;
-    // bool FirstChar = true;
-    while (true) {
-        int curChar = fgetc(src);
-        switch (curChar) {
-        case '\r':
-            break;
-        case EOF:
-            fclose(src); // Закрытие файла
-            return EXIT_SUCCESS;
-            break;
-        case '\n':
-            line++;
-        default:
-            putchar(curChar);
-            break;
-        }
-    }
+    FormatAndPrint(src);
+    fclose(src); // Закрытие файла
+    return EXIT_SUCCESS;
+
 }

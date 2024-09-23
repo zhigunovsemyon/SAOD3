@@ -7,10 +7,6 @@
 начинался с прописной буквы и был сдвинут относительно предыдущего
 куплета на 5 позиций вправо или влево поочередно. */
 
-inline void PutIdent(void) {
-    printf("     ");
-}
-
 // Вычисление длинны файла fptr
 long FileLen(FILE *const fptr) {
     fseek(fptr, SEEK_SET, SEEK_END);
@@ -26,8 +22,8 @@ void usage(char const *const filename) {
 
 //Функция, в которой будет исполняться алгоритм используя файл src
 void FormatAndPrint(FILE *const src) {
-    // bool Ident = true;
-    [[maybe_unused]] size_t line = 0;
+    bool Ident = false;//флаг необходимости сдвига строки
+    size_t line = 1;//номер строки
     // bool FirstChar = true;
     while (true) {
         //Прочитанный символ
@@ -37,9 +33,17 @@ void FormatAndPrint(FILE *const src) {
         case '\r'://Служебный символ возврата каретки, пропуск
             break;
         case EOF://Символ, сигнализирующий окончание файла, завершение работы
+            putchar('\n');
             return;
         case '\n'://Символ переноса строки
-            line++;//Увеличение счётчика строк, вывод на экран (далее)
+            line++;
+            /*Увеличение счётчика строк, вывод на экран.
+             *Если флаг сдвига поднят, вставляется промежуток*/
+            printf("\n%s", (Ident) ? "    " : "");
+            //Каждую 4 строку флаг сдвига переворачивается
+            if (line % 4 == 0)
+                Ident = !Ident;
+            break;
         default://Любой иной символ
             putchar(curChar);//Вывод
             break;//Переход на следующий виток цикла

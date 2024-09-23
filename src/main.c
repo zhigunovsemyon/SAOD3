@@ -7,7 +7,9 @@
 начинался с прописной буквы и был сдвинут относительно предыдущего
 куплета на 5 позиций вправо или влево поочередно. */
 
-inline void PutIdent(void) { printf("     "); }
+inline void PutIdent(void) {
+    printf("     ");
+}
 
 // Вычисление длинны файла fptr
 long FileLen(FILE *const fptr) {
@@ -18,7 +20,7 @@ long FileLen(FILE *const fptr) {
 }
 
 // Вывод справки об использовании
-void usage(char const *const filename) {
+inline void usage(char const *const filename) {
     printf("%s ПУТЬ_К_ФАЙЛУ\n", filename);
 }
 

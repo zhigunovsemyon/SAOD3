@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 /*В файле записан текст стихотворения. Форматировать текст так,
 чтобы каждый куплет из 4 строк следовал с одной и той же позиции,
 начинался с прописной буквы и был сдвинут относительно предыдущего
@@ -25,7 +26,27 @@
 • Необходимо уметь обосновать выбранные размеры переменных и
 временных буферов. */
 
-#define COUPLET 4
+#define DEFAULT_COUPLET_SIZE 4
+#define COUPLETSIZE_KEY "--coupletsize"
+
+int GetCoupletSize (int const argc, char const *const *const args) {
+	int coupletsize = DEFAULT_COUPLET_SIZE;
+	if (argc == 2)
+		return coupletsize;
+	if (argc != 4)
+		return -1;
+
+	if (0 != strcmp(args[1], COUPLETSIZE_KEY))
+		return -1;
+	
+	if (1 != sscanf(args[2], "%d", &coupletsize))
+		return -1;
+
+	if (coupletsize < 1)
+		return -1;
+
+	return coupletsize;
+}
 
 // Вывод справки об использовании
 void usage(char const *const filename) {
@@ -33,7 +54,7 @@ void usage(char const *const filename) {
 }
 
 // Функция, в которой будет исполняться алгоритм используя файл src
-void FormatAndPrint(FILE *const src) {
+void FormatAndPrint(FILE *const src, size_t coupletsize) {
     bool Ident = false; // флаг необходимости сдвига строки
     size_t line = 1; // номер строки
     bool FirstChar = true; // Флаг того, первый ли символ в строке
@@ -59,7 +80,7 @@ void FormatAndPrint(FILE *const src) {
             line++;
             printf("\n%s", (Ident) ? "    " : "");
             // Каждую COUPLET строку флаг сдвига переворачивается
-            if (line % COUPLET == 0)
+            if (line % coupletsize == 0)
                 Ident = !Ident;
             FirstChar = true; // Подъём флага первого символа для следующего
             break;
@@ -92,21 +113,21 @@ void FormatAndPrint(FILE *const src) {
 }
 
 int main(int const argc, char const *const *const args) {
-    // Вывод справки об использовании при неправильном вводе
-    if (argc != 2) {
+	int coupletsize = GetCoupletSize(argc, args);
+    if (coupletsize < 1) {
         usage(args[0]);
-        return EXIT_SUCCESS;
+        return EXIT_FAILURE;
     }
 
     // Открываемый файл с текстом
     FILE *src;
     // Открытие файла, вывод ошибки при неудаче
-    if (NULL == (src = fopen(args[1], "rt"))) {
-        perror(args[1]);
+    if (NULL == (src = fopen(args[argc - 1], "rt"))) {
+        perror(args[argc - 1]);
         return EXIT_FAILURE;
     }
 
-    FormatAndPrint(src);
+    FormatAndPrint(src, (size_t)coupletsize);
     fclose(src); // Закрытие файла
     return EXIT_SUCCESS;
 }

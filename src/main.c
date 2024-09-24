@@ -37,6 +37,7 @@ void FormatAndPrint(FILE *const src) {
     bool Ident = false; // флаг необходимости сдвига строки
     size_t line = 1; // номер строки
     bool FirstChar = true; // Флаг того, первый ли символ в строке
+    bool PrevSymbolWasSpace = false; // Флаг, был ли предыдущий символ пробелом
     while (true) {
         // Прочитанный символ
         int const curChar = fgetc(src);
@@ -71,6 +72,19 @@ void FormatAndPrint(FILE *const src) {
                     break;
             }
             FirstChar = false; // Сброс флага первенства в строке
+            /*Если символ не был первым в строке, и является пробелом*/
+            if (isspace(curChar)) {
+                /*При этом предыдущий символ уже был пробелом,
+                 * текущий символ пропускается*/
+                if (PrevSymbolWasSpace == true) {
+                    break;
+                }
+                // Если пробел первый в ряду, флаг поднимается, символ выводится
+                PrevSymbolWasSpace = true;
+            } else {
+				//Если символ пробелом не является, флаг пробела сбрасывается
+                PrevSymbolWasSpace = false;
+            }
             putchar(curChar); // Вывод
             break; // Переход на следующий виток цикла
         }

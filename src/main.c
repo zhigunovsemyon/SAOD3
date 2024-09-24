@@ -18,7 +18,7 @@ void usage(char const *const filename) {
 void FormatAndPrint(FILE *const src) {
     bool Ident = false; // флаг необходимости сдвига строки
     size_t line = 1; // номер строки
-    bool FirstChar = true;
+    bool FirstChar = true; // Флаг того, первый ли символ в строке
     while (true) {
         // Прочитанный символ
         int const curChar = fgetc(src);
@@ -30,23 +30,29 @@ void FormatAndPrint(FILE *const src) {
             putchar('\n');
             return;
         case '\n': // Символ переноса строки
-            line++;
+            /* Если перенос был первым символом в строке, то вся строка
+            пропускается и не учитывается счётчиком */
+            if (FirstChar) {
+                break;
+            }
             /*Увеличение счётчика строк, вывод на экран.
              *Если флаг сдвига поднят, вставляется промежуток*/
+            line++;
             printf("\n%s", (Ident) ? "    " : "");
             // Каждую COUPLET строку флаг сдвига переворачивается
             if (line % COUPLET == 0)
                 Ident = !Ident;
-			FirstChar = true; // Подъём флага первого символа для следующего 
+            FirstChar = true; // Подъём флага первого символа для следующего
             break;
-        default:              // Любой иной символ
-			//Если символ первый в строке
-			if (FirstChar) {
-				//И этот символ является пробелом, табуляцией или переносом, он пропускается
-				if(isspace(curChar))
-					break;
-			}
-			FirstChar = false;
+        default: // Любой иной символ
+            // Если символ первый в строке
+            if (FirstChar) {
+                /* И этот символ является пробелом, табуляцией,
+                 * он пропускается */
+                if (isspace(curChar))
+                    break;
+            }
+            FirstChar = false; // Сброс флага первенства в строке
             putchar(curChar); // Вывод
             break; // Переход на следующий виток цикла
         }

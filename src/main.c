@@ -46,6 +46,7 @@ void FormatAndPrint(FILE *const src) {
 				if(isspace(curChar))
 					break;
 			}
+			FirstChar = false;
             putchar(curChar); // Вывод
             break; // Переход на следующий виток цикла
         }

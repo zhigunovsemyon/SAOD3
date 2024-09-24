@@ -29,28 +29,35 @@
 #define DEFAULT_COUPLET_SIZE 4
 #define COUPLETSIZE_KEY "--coupletsize"
 
-int GetCoupletSize (int const argc, char const *const *const args) {
-	int coupletsize = DEFAULT_COUPLET_SIZE;
-	if (argc == 2)
-		return coupletsize;
-	if (argc != 4)
-		return -1;
+int GetCoupletSize(int const argc, char const *const *const args) {
+    // Указание стандартного размера куплета
+    int coupletsize = DEFAULT_COUPLET_SIZE;
+    /* Если пользователь указал только название файла, но не размер,
+     возвращается стандартный */
+    if (argc == 2)
+        return coupletsize;
+    /* Если пользователь ввёл не 2, но не 4 аргумента, 
+	 * возврат флага неправильного ввода */
+    if (argc != 4)
+        return -1;
 
-	if (0 != strcmp(args[1], COUPLETSIZE_KEY))
-		return -1;
-	
-	if (1 != sscanf(args[2], "%d", &coupletsize))
-		return -1;
+	/*Если пользователь не указал ключ для выбора куплета, 
+	 * возврат флага неправильного ввода */
+    if (0 != strcmp(args[1], COUPLETSIZE_KEY))
+        return -1;
 
-	if (coupletsize < 1)
-		return -1;
+	/*Если следующее слово за ключём куплета не является числом,
+	 * возврат флага неправильного ввода*/
+    if (1 != sscanf(args[2], "%d", &coupletsize))
+        return -1;
 
-	return coupletsize;
+	//Возврат размера куплета
+    return coupletsize;
 }
 
 // Вывод справки об использовании
 void usage(char const *const filename) {
-    printf("%s ПУТЬ_К_ФАЙЛУ\n", filename);
+    printf("%s [%s РАЗМЕР_КУПЛЕТА] ПУТЬ_К_ФАЙЛУ\n", filename, COUPLETSIZE_KEY);
 }
 
 // Функция, в которой будет исполняться алгоритм используя файл src
@@ -103,7 +110,7 @@ void FormatAndPrint(FILE *const src, size_t coupletsize) {
                 // Если пробел первый в ряду, флаг поднимается, символ выводится
                 PrevSymbolWasSpace = true;
             } else {
-				//Если символ пробелом не является, флаг пробела сбрасывается
+                // Если символ пробелом не является, флаг пробела сбрасывается
                 PrevSymbolWasSpace = false;
             }
             putchar(curChar); // Вывод
@@ -113,7 +120,7 @@ void FormatAndPrint(FILE *const src, size_t coupletsize) {
 }
 
 int main(int const argc, char const *const *const args) {
-	int coupletsize = GetCoupletSize(argc, args);
+    int coupletsize = GetCoupletSize(argc, args);
     if (coupletsize < 1) {
         usage(args[0]);
         return EXIT_FAILURE;

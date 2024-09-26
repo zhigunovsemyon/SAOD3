@@ -29,6 +29,7 @@
 #define DEFAULT_COUPLET_SIZE 4
 #define COUPLETSIZE_KEY "--coupletsize"
 
+// Получение размера куплета на основе аргументов args в количестве argc
 int GetCoupletSize(int const argc, char const *const *const args) {
     // Указание стандартного размера куплета
     int coupletsize = DEFAULT_COUPLET_SIZE;
@@ -120,7 +121,12 @@ void FormatAndPrint(FILE *const src, size_t coupletsize) {
 }
 
 int main(int const argc, char const *const *const args) {
-    int coupletsize = GetCoupletSize(argc, args);
+    // Размер куплета
+    int coupletsize;
+    // Получение размера куплета на основе аргументов программы
+    coupletsize = GetCoupletSize(argc, args);
+    /* Если размер куплета отрицательный, значит параметры программы
+    некорректные. Пользователю будет выведена справка по использованию */
     if (coupletsize < 1) {
         usage(args[0]);
         return EXIT_FAILURE;
